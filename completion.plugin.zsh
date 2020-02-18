@@ -14,6 +14,7 @@ fi
 # Add zsh-completions to $fpath.
 fpath+="${0:h}/completions"
 fpath+="${0:h}/external/zsh-completions/src"
+
 # Set options
 setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
 setopt ALWAYS_TO_END       # Move cursor to the end of a completed word.
@@ -27,17 +28,17 @@ setopt EXTENDED_GLOB       # Needed for file modification glob modifiers with co
 unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
 unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 
-# Load and initialize the completion system ignoring insecure directories with a
-# cache time of 20 hours, so it should almost always regenerate the first time a
-# shell is opened each day.
-autoload -Uz compinit
-_comp_files=(${ZDOTDIR:-$HOME}/.zcompdump(Nm-20))
-if (( $#_comp_files )); then
-  compinit -i -C
-else
-  compinit -i
-fi
-unset _comp_files
+# # Load and initialize the completion system ignoring insecure directories with a
+# # cache time of 20 hours, so it should almost always regenerate the first time a
+# # shell is opened each day.
+# autoload -Uz compinit
+# _comp_files=(${ZDOTDIR:-$HOME}/.zcompdump(Nm-20))
+# if (( $#_comp_files )); then
+#   compinit -i -C
+# else
+#   compinit -i
+# fi
+# unset _comp_files
 
 #
 # Styles
@@ -126,13 +127,14 @@ zstyle ':completion:*:manuals.*' insert-sections   true
 zstyle ':completion:*:man:*' menu yes select
 
 # Search path for sudo completion
-    zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
-                                               /usr/local/bin  \
-                                               /usr/sbin       \
-                                               /usr/bin        \
-                                               /sbin           \
-                                               /bin            \
-                                               /usr/X11R6/bin
+zstyle ':completion:*:sudo:*' command-path \
+  /usr/local/sbin \
+  /usr/local/bin  \
+  /usr/sbin       \
+  /usr/bin        \
+  /sbin           \
+  /bin            \
+  /usr/X11R6/bin
 
 # provide .. as a completion
 zstyle ':completion:*' special-dirs ..
@@ -144,6 +146,7 @@ function _force_rehash () {
 }
 
 # try to be smart about when to use what completer...
+WORDCHARS=${WORDCHARS//[\/]}
 setopt correct
 zstyle -e ':completion:*' completer '
     if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
@@ -156,3 +159,6 @@ zstyle -e ':completion:*' completer '
             reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
         fi
     fi'
+
+# Customize spelling correction prompt.
+SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
