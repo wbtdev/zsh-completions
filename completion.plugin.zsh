@@ -28,17 +28,17 @@ setopt EXTENDED_GLOB       # Needed for file modification glob modifiers with co
 unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
 unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 
-# # Load and initialize the completion system ignoring insecure directories with a
-# # cache time of 20 hours, so it should almost always regenerate the first time a
-# # shell is opened each day.
-# autoload -Uz compinit
-# _comp_files=(${ZDOTDIR:-$HOME}/.zcompdump(Nm-20))
-# if (( $#_comp_files )); then
-#   compinit -i -C
-# else
-#   compinit -i
-# fi
-# unset _comp_files
+# Load and initialize the completion system ignoring insecure directories with a
+# cache time of 20 hours, so it should almost always regenerate the first time a
+# shell is opened each day.
+autoload -Uz compinit
+_comp_files=(${ZDOTDIR:-$HOME}/.zcompdump(Nm-20))
+if (( $#_comp_files )); then
+  compinit -i -C && bashcompinit
+else
+  compinit -i && bashcompinit
+fi
+unset _comp_files
 
 #
 # Styles

@@ -9,7 +9,7 @@
 # For convenience, a completion reference guide is included at the bottom of
 # this file.
 #
-# Originally based on code from the zsh-users project — see copyright notice
+# Originally based on code from the zsh-users project - see copyright notice
 # below.
 
 _rg() {
@@ -17,7 +17,7 @@ _rg() {
   local -a context line state state_descr args tmp suf
   local -A opt_args
 
-  # ripgrep has many options which negate the effect of a more common one — for
+  # ripgrep has many options which negate the effect of a more common one - for
   # example, `--no-column` to negate `--column`, and `--messages` to negate
   # `--no-messages`. There are so many of these, and they're so infrequently
   # used, that some users will probably find it irritating if they're completed
@@ -38,7 +38,7 @@ _rg() {
   # We make heavy use of argument groups here to prevent the option specs from
   # growing unwieldy. These aren't supported in zsh <5.4, though, so we'll strip
   # them out below if necessary. This makes the exclusions inaccurate on those
-  # older versions, but oh well — it's not that big a deal
+  # older versions, but oh well - it's not that big a deal
   args=(
     + '(exclusive)' # Misc. fully exclusive options
     '(: * -)'{-h,--help}'[display help information]'
@@ -267,7 +267,7 @@ _rg() {
     '(--pre)'{-z,--search-zip}'[search in compressed files]'
     $no"--no-search-zip[don't search in compressed files]"
 
-    + misc # Other options — no need to separate these at the moment
+    + misc # Other options - no need to separate these at the moment
     '(-b --byte-offset)'{-b,--byte-offset}'[show 0-based byte offset for each matching line]'
     '--color=[specify when to use colors in output]:when:((
       never\:"never use colors"
@@ -351,7 +351,7 @@ _rg() {
         _sequence -s , _rg_types && ret=0
       # @todo This bit in particular could be better, but it's a little
       # complex, and attempting to solve it seems to run us up against a crash
-      # bug — zsh # 40362
+      # bug - zsh # 40362
       elif compset -P '[^:]##:'; then
         _message 'glob or include directive' && ret=1
       elif [[ ! -prefix *:* ]]; then
@@ -463,7 +463,7 @@ _rg "$@"
 # behaviour, but since this line expands to two specs describing `-q` *and*
 # `--quiet` we do need to explicitly list all of them here.
 #
-# The next line defines a hidden option `--silent` — maybe it's a deprecated
+# The next line defines a hidden option `--silent` - maybe it's a deprecated
 # synonym for `--quiet`. The leading `!` indicates that zsh shouldn't offer this
 # option during completion. The benefit of providing a spec for an option that
 # shouldn't be completed is that, if someone *does* use it, we can correctly
@@ -478,7 +478,7 @@ _rg "$@"
 # The `=` at the end of `--color=` indicates that the argument may appear either
 # like `--color always` or like `--color=always`; this is how most GNU-style
 # command-line tools work. The corresponding short option would normally use `+`
-# — for example, `-c+` would allow either `-c always` or `-calways`. For this
+# - for example, `-c+` would allow either `-c always` or `-calways`. For this
 # option, the arguments are known ahead of time, so we can simply list them in
 # parentheses at the end (`when` is used as the description for the argument).
 #
@@ -506,7 +506,7 @@ _rg "$@"
 #   '!--silent'
 #   {-v,--verbose}'[increase output verbosity]'
 #
-# Here we take advantage of a useful feature of spec grouping — when the group
+# Here we take advantage of a useful feature of spec grouping - when the group
 # name is surrounded by parentheses, as in `(verbosity)`, it tells zsh that all
 # of the options in that group are exclusive with each other. As a result, we
 # don't need to manually list out the exclusions at the beginning of each
@@ -531,14 +531,14 @@ _rg "$@"
 # * Use `+` or `=` as described above for options that take arguments
 # * Provide a description for all options, option-arguments, and operands
 # * Capitalise/punctuate argument descriptions as phrases, not complete
-#   sentences — 'display help information', never 'Display help information.'
+#   sentences - 'display help information', never 'Display help information.'
 #   (but still capitalise acronyms and proper names)
-# * Write argument descriptions as verb phrases — 'display x', 'enable y',
+# * Write argument descriptions as verb phrases - 'display x', 'enable y',
 #   'use z'
 # * Word descriptions to make it clear when an option expects an argument;
 #   usually this is done with the word 'specify', as in 'specify x' or
 #   'use specified x')
-# * Write argument descriptions as tersely as possible — for example, articles
+# * Write argument descriptions as tersely as possible - for example, articles
 #   like 'a' and 'the' should be omitted unless it would be confusing
 #
 # Other conventions currently used by this function:
