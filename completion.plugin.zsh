@@ -14,7 +14,9 @@ fi
 # Add zsh-completions to $fpath.
 fpath+="${0:h}/src"
 fpath+="${0:h}/external/zsh-completions/src"
-source "${0:h}/external/zchee-completions/zsh-completions.plugin.zsh"
+fpath+="${0:h}/external/zchee/src/macOS"
+fpath+="${0:h}/external/zchee/src/go"
+fpath+="${0:h}/external/zchee/src/zsh"
 
 # Set options
 setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
