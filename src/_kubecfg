@@ -1,0 +1,360 @@
+#compdef _kubecfg kubecfg
+
+
+function _kubecfg {
+  local -a commands
+
+  _arguments -C \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "completion:Generate shell completions for kubecfg"
+      "delete:Delete Kubernetes resources described in local config"
+      "diff:Display differences between server and local config"
+      "help:Help about any command"
+      "show:Show expanded resource definitions"
+      "update:Update Kubernetes resources with local config"
+      "validate:Compare generated manifest against server OpenAPI spec"
+      "version:Print version information"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  completion)
+    _kubecfg_completion
+    ;;
+  delete)
+    _kubecfg_delete
+    ;;
+  diff)
+    _kubecfg_diff
+    ;;
+  help)
+    _kubecfg_help
+    ;;
+  show)
+    _kubecfg_show
+    ;;
+  update)
+    _kubecfg_update
+    ;;
+  validate)
+    _kubecfg_validate
+    ;;
+  version)
+    _kubecfg_version
+    ;;
+  esac
+}
+
+function _kubecfg_completion {
+  _arguments \
+    '(-h --help)'{-h,--help}'[help for completion]' \
+    '--shell[Shell variant for which to generate completions.  Supported values are bash,zsh]:' \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_delete {
+  _arguments \
+    '--grace-period[Number of seconds given to resources to terminate gracefully. A negative value is ignored]:' \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_diff {
+  _arguments \
+    '--diff-strategy[Diff strategy, all or subset.]:' \
+    '--omit-secrets[hide secret details when showing diff]' \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_help {
+  _arguments \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_show {
+  _arguments \
+    '(-o --format)'{-o,--format}'[Output format.  Supported values are: json, yaml]:' \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_update {
+  _arguments \
+    '--create[Create missing resources]' \
+    '--dry-run[Perform only read-only operations]' \
+    '--gc-tag[Add this tag to updated objects, and garbage collect existing objects with this tag and not in config]:' \
+    '--ignore-unknown[Don'\''t fail validation if the schema for a given resource type is not found]' \
+    '--skip-gc[Don'\''t perform garbage collection, even with --gc-tag]' \
+    '--validate[Validate input against server schema]' \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_validate {
+  _arguments \
+    '--ignore-unknown[Don'\''t fail if the schema for a given resource type is not found]' \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
+function _kubecfg_version {
+  _arguments \
+    '--as[Username to impersonate for the operation]:' \
+    '*--as-group[Group to impersonate for the operation, this flag can be repeated to specify multiple groups.]:' \
+    '--certificate-authority[Path to a cert file for the certificate authority]:' \
+    '--client-certificate[Path to a client certificate file for TLS]:' \
+    '--client-key[Path to a client key file for TLS]:' \
+    '--cluster[The name of the kubeconfig cluster to use]:' \
+    '--context[The name of the kubeconfig context to use]:' \
+    '*--ext-code[Values of external variables with values supplied as Jsonnet code]:' \
+    '*--ext-code-file[Read external variables with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-V *--ext-str)'{\*-V,\*--ext-str}'[Values of external variables with string values]:' \
+    '*--ext-str-file[Read external variables with string values from files]:filename:_files' \
+    '--insecure-skip-tls-verify[If true, the server'\''s certificate will not be checked for validity. This will make your HTTPS connections insecure]' \
+    '(*-J *--jpath)'{\*-J,\*--jpath}'[Additional Jsonnet library search path, appended to the ones in the KUBECFG_JPATH env var. May be repeated.]:filename:_files' \
+    '(*-U *--jurl)'{\*-U,\*--jurl}'[Additional Jsonnet library search path given as a URL. May be repeated.]:' \
+    '--kubeconfig[Path to a kube config. Only required if out-of-cluster]:filename:_files' \
+    '(-n --namespace)'{-n,--namespace}'[If present, the namespace scope for this CLI request]:' \
+    '--password[Password for basic authentication to the API server]:' \
+    '--request-timeout[The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don'\''t timeout requests.]:' \
+    '--resolve-images[Change implementation of resolveImage native function. One of: noop, registry]:' \
+    '--resolve-images-error[Action when resolveImage fails. One of ignore,warn,error]:' \
+    '--server[The address and port of the Kubernetes API server]:' \
+    '*--tla-code[Values of top level arguments with values supplied as Jsonnet code]:' \
+    '*--tla-code-file[Read top level arguments with values supplied as Jsonnet code from files]:filename:_files' \
+    '(*-A *--tla-str)'{\*-A,\*--tla-str}'[Values of top level arguments with string values]:' \
+    '*--tla-str-file[Read top level arguments with string values from files]:filename:_files' \
+    '--token[Bearer token for authentication to the API server]:' \
+    '--user[The name of the kubeconfig user to use]:' \
+    '--username[Username for basic authentication to the API server]:' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity. May be given multiple times.]'
+}
+
