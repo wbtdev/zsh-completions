@@ -1,6 +1,0 @@
-[submodule "external/zsh-completions"]
-	path = external/zsh-completions
-	url = https://github.com/zsh-users/zsh-completions.git
-[submodule "external/zchee"]
-	path = external/zchee
-	url = https://github.com/zchee/zsh-completions.git

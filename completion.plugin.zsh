@@ -6,42 +6,25 @@
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
+fpath+="${0:h}/src"
+
 # Return if requirements are not found.
 if [[ "$TERM" == 'dumb' ]]; then
   return 1
 fi
 
-# Add zsh-completions to $fpath.
-fpath+="${0:h}/src"
-fpath+="${0:h}/external/zsh-completions/src"
-fpath+="${0:h}/external/zchee/src/macOS"
-fpath+="${0:h}/external/zchee/src/go"
-fpath+="${0:h}/external/zchee/src/zsh"
-
 # Set options
-setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
-setopt ALWAYS_TO_END       # Move cursor to the end of a completed word.
-setopt PATH_DIRS           # Perform path search even on command names with slashes.
-setopt NO_CASE_GLOB        # Make globbing case insensitive.
-setopt NO_LIST_BEEP        # Don't beep on ambiguous completions.
-setopt AUTO_MENU           # Show completion menu on a successive tab press.
-setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
-setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
-setopt EXTENDED_GLOB       # Needed for file modification glob modifiers with compinit
-unsetopt MENU_COMPLETE     # Do not autoselect the first completion entry.
-unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
-
-# Load and initialize the completion system ignoring insecure directories with a
-# cache time of 20 hours, so it should almost always regenerate the first time a
-# shell is opened each day.
-autoload -Uz compinit bashcompinit
-_comp_files=(${ZDOTDIR:-$HOME}/.zcompdump(Nm-20))
-if (( $#_comp_files )); then
-  compinit -i -C && bashcompinit
-else
-  compinit -i && bashcompinit
-fi
-unset _comp_files
+setopt no_complete_in_word    # Complete from both ends of a word.
+setopt always_to_end       # Move cursor to the end of a completed word.
+setopt path_dirs           # Perform path search even on command names with slashes.
+setopt no_case_glob        # Make globbing case insensitive.
+setopt no_list_beep        # Don't beep on ambiguous completions.
+setopt auto_menu           # Show completion menu on a successive tab press.
+setopt auto_list           # Automatically list choices on ambiguous completion.
+setopt auto_param_slash    # If completed parameter is a directory, add a trailing slash.
+setopt extended_glob       # Needed for file modification glob modifiers with compinit
+setopt no_menu_complete     # Do not autoselect the first completion entry.
+setopt no_flow_control      # Disable start/stop characters in shell editor.
 
 #
 # Styles
@@ -55,17 +38,19 @@ zstyle ':completion::complete:*' cache-path "${ZDOTDIR:-$HOME}/.zcompcache"
 zstyle ':completion:*:*:zcompile:*' ignored-patterns '(*~|*.zwc)'
 
 # Case-insensitive (all), partial-word, and then substring completion.
-zstyle ':completion:*' matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-setopt CASE_GLOB
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+setopt no_case_glob              # Use Case-Insensitve Globbing.
+setopt globdots                 # Glob Dotfiles As Well.
+setopt extendedglob             # Use Extended Globbing.
 
 # Group matches and describe.
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:correct:*' original true
 zstyle ':completion:*:correct:*' insert-unambiguous true
 zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
-zstyle ':completion:*:correct:*' original true
 zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
@@ -73,6 +58,7 @@ zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
+zstyle ':completion:*' rehash true
 
 # Fuzzy match mistyped completions.
 zstyle ':completion:*:match:*' original only
@@ -92,7 +78,7 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
 
 # Directories
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
 zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
@@ -129,40 +115,33 @@ zstyle ':completion:*:manuals.*' insert-sections   true
 zstyle ':completion:*:man:*' menu yes select
 
 # Search path for sudo completion
-zstyle ':completion:*:sudo:*' command-path \
-  /usr/local/sbin \
-  /usr/local/bin  \
-  /usr/sbin       \
-  /usr/bin        \
-  /sbin           \
-  /bin            \
-  /usr/X11R6/bin
+zstyle ':completion:*:sudo:*' command-path $path
 
 # provide .. as a completion
 zstyle ':completion:*' special-dirs ..
 
 # run rehash on completion so new installed program are found automatically:
-function _force_rehash () {
-    (( CURRENT == 1 )) && rehash
-    return 1
+_force_rehash () {
+  (( CURRENT == 1 )) && rehash
+  return 1
 }
 
 # try to be smart about when to use what completer...
 WORDCHARS=${WORDCHARS//[\/]}
 setopt correct
 zstyle -e ':completion:*' completer '
-    if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
-        _last_try="$HISTNO$BUFFER$CURSOR"
-        reply=(_complete _match _ignored _prefix _files)
+  if [[ $_last_try != "$HISTNO$BUFFER$CURSOR" ]] ; then
+    _last_try="$HISTNO$BUFFER$CURSOR"
+    reply=(_complete _match _ignored _prefix _files)
+  else
+    if [[ $words[1] == (rm|mv) ]] ; then
+      reply=(_complete _files)
     else
-        if [[ $words[1] == (rm|mv) ]] ; then
-            reply=(_complete _files)
-        else
-            reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
-        fi
-    fi'
+      reply=(_oldlist _expand _force_rehash _complete _ignored _correct _approximate _files)
+    fi
+  fi'
 
 # Customize spelling correction prompt.
 SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 
-zstyle :compinstall filename '/Users/wbtdev/.zshrc'
+zstyle :compinstall filename "$HOME/.zshrc"
