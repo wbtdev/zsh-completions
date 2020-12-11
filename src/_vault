@@ -1,8 +1,0 @@
-#compdef vault
-
-# See https://vaultproject.io/
-# Drop this file in ~/.oh-my-zsh/completions/_vault
-
-subcommands=$(vault --help 2|& grep -E '^\s{4}' | awk '{printf $1; $1=""; print "\\:\x27"$0"\x27"}')
-_arguments "1:subcommand:((${subcommands}))"
-_message 'vault [-version] [-help] <command> [args]'
