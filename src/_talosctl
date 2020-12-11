@@ -1,0 +1,764 @@
+#compdef _talosctl talosctl
+
+
+function _talosctl {
+  local -a commands
+
+  _arguments -C \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "bootstrap:Bootstrap the cluster"
+      "cluster:A collection of commands for managing local docker-based or firecracker-based clusters"
+      "completion:Output shell completion code for the specified shell (bash or zsh)"
+      "config:Manage the client configuration"
+      "containers:List containers"
+      "copy:Copy data out from the node"
+      "crashdump:Dump debug information about the cluster"
+      "dashboard:Cluster dashboard with real-time metrics"
+      "dmesg:Retrieve kernel logs"
+      "events:Stream runtime events"
+      "gen:Generate CAs, certificates, and private keys"
+      "health:Check cluster health"
+      "help:Help about any command"
+      "interfaces:List network interfaces"
+      "kubeconfig:Download the admin kubeconfig from the node"
+      "list:Retrieve a directory listing"
+      "logs:Retrieve logs for a service"
+      "memory:Show memory usage"
+      "mounts:List mounts"
+      "processes:List running processes"
+      "read:Read a file on the machine"
+      "reboot:Reboot a node"
+      "recover:Recover a control plane"
+      "reset:Reset a node"
+      "restart:Restart a process"
+      "rollback:Rollback a node to the previous installation"
+      "routes:List network routes"
+      "service:Retrieve the state of a service (or all services), control service state"
+      "shutdown:Shutdown a node"
+      "stats:Get container stats"
+      "time:Gets current server time"
+      "upgrade:Upgrade Talos on the target node"
+      "upgrade-k8s:Upgrade Kubernetes control plane in the Talos cluster."
+      "validate:Validate config"
+      "version:Prints the version"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  bootstrap)
+    _talosctl_bootstrap
+    ;;
+  cluster)
+    _talosctl_cluster
+    ;;
+  completion)
+    _talosctl_completion
+    ;;
+  config)
+    _talosctl_config
+    ;;
+  containers)
+    _talosctl_containers
+    ;;
+  copy)
+    _talosctl_copy
+    ;;
+  crashdump)
+    _talosctl_crashdump
+    ;;
+  dashboard)
+    _talosctl_dashboard
+    ;;
+  dmesg)
+    _talosctl_dmesg
+    ;;
+  events)
+    _talosctl_events
+    ;;
+  gen)
+    _talosctl_gen
+    ;;
+  health)
+    _talosctl_health
+    ;;
+  help)
+    _talosctl_help
+    ;;
+  interfaces)
+    _talosctl_interfaces
+    ;;
+  kubeconfig)
+    _talosctl_kubeconfig
+    ;;
+  list)
+    _talosctl_list
+    ;;
+  logs)
+    _talosctl_logs
+    ;;
+  memory)
+    _talosctl_memory
+    ;;
+  mounts)
+    _talosctl_mounts
+    ;;
+  processes)
+    _talosctl_processes
+    ;;
+  read)
+    _talosctl_read
+    ;;
+  reboot)
+    _talosctl_reboot
+    ;;
+  recover)
+    _talosctl_recover
+    ;;
+  reset)
+    _talosctl_reset
+    ;;
+  restart)
+    _talosctl_restart
+    ;;
+  rollback)
+    _talosctl_rollback
+    ;;
+  routes)
+    _talosctl_routes
+    ;;
+  service)
+    _talosctl_service
+    ;;
+  shutdown)
+    _talosctl_shutdown
+    ;;
+  stats)
+    _talosctl_stats
+    ;;
+  time)
+    _talosctl_time
+    ;;
+  upgrade)
+    _talosctl_upgrade
+    ;;
+  upgrade-k8s)
+    _talosctl_upgrade-k8s
+    ;;
+  validate)
+    _talosctl_validate
+    ;;
+  version)
+    _talosctl_version
+    ;;
+  esac
+}
+
+function _talosctl_bootstrap {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+
+function _talosctl_cluster {
+  local -a commands
+
+  _arguments -C \
+    '--name[the name of the cluster]:' \
+    '--provisioner[Talos cluster provisioner to use]:' \
+    '--state[directory path to store cluster state]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "create:Creates a local docker-based or firecracker-based kubernetes cluster"
+      "destroy:Destroys a local docker-based or firecracker-based kubernetes cluster"
+      "show:Shows info about a local provisioned kubernetes cluster"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  create)
+    _talosctl_cluster_create
+    ;;
+  destroy)
+    _talosctl_cluster_destroy
+    ;;
+  show)
+    _talosctl_cluster_show
+    ;;
+  esac
+}
+
+function _talosctl_cluster_create {
+  _arguments \
+    '--arch[cluster architecture]:' \
+    '--cidr[CIDR of the cluster network]:' \
+    '*--cni-bin-path[search path for CNI binaries (VM only)]:' \
+    '--cni-cache-dir[CNI cache directory path (VM only)]:' \
+    '--cni-conf-dir[CNI config directory path (VM only)]:' \
+    '--cpus[the share of CPUs as fraction (each container)]:' \
+    '--crashdump[print debug crashdump to stderr when cluster startup fails]' \
+    '--custom-cni-url[install custom CNI from the URL (Talos cluster)]:' \
+    '--disk[the limit on disk size in MB (each VM)]:' \
+    '--dns-domain[the dns domain to use for cluster]:' \
+    '--docker-host-ip[Host IP to forward exposed ports to (Docker provisioner only)]:' \
+    '--endpoint[use endpoint instead of provider defaults]:' \
+    '(-p --exposed-ports)'{-p,--exposed-ports}'[Comma-separated list of ports/protocols to expose on init node. Ex -p <hostPort>:<containerPort>/<protocol (tcp or udp)> (Docker provisioner only)]:' \
+    '--image[the image to use]:' \
+    '--init-node-as-endpoint[use init node as endpoint instead of any load balancer endpoint]' \
+    '--initrd-path[the uncompressed kernel image to use]:' \
+    '(-i --input-dir)'{-i,--input-dir}'[location of pre-generated config files]:' \
+    '--install-image[the installer image to use]:' \
+    '--kubernetes-version[desired kubernetes version to run]:' \
+    '--masters[the number of masters to create]:' \
+    '--memory[the limit on memory usage in MB (each container)]:' \
+    '--mtu[MTU of the cluster network]:' \
+    '*--nameservers[list of nameservers to use]:' \
+    '*--registry-mirror[list of registry mirrors to use in format: <registry host>=<mirror URL>]:' \
+    '--vmlinuz-path[the compressed kernel image to use]:' \
+    '--wait[wait for the cluster to be ready before returning]' \
+    '--wait-timeout[timeout to wait for the cluster to be ready]:' \
+    '--with-bootloader[enable bootloader to load kernel and initramfs from disk image after install]' \
+    '--with-debug[enable debug in Talos config to send service logs to the console]' \
+    '--with-init-node[create the cluster with an init node]' \
+    '--workers[the number of workers to create]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '--name[the name of the cluster]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--provisioner[Talos cluster provisioner to use]:' \
+    '--state[directory path to store cluster state]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_cluster_destroy {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '--name[the name of the cluster]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--provisioner[Talos cluster provisioner to use]:' \
+    '--state[directory path to store cluster state]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_cluster_show {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '--name[the name of the cluster]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--provisioner[Talos cluster provisioner to use]:' \
+    '--state[directory path to store cluster state]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_completion {
+  _arguments \
+    '(-h --help)'{-h,--help}'[help for completion]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:' \
+    '1: :("bash" "zsh")'
+}
+
+
+function _talosctl_config {
+  local -a commands
+
+  _arguments -C \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "add:Add a new context"
+      "context:Set the current context"
+      "endpoint:Set the endpoint(s) for the current context"
+      "node:Set the node(s) for the current context"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  add)
+    _talosctl_config_add
+    ;;
+  context)
+    _talosctl_config_context
+    ;;
+  endpoint)
+    _talosctl_config_endpoint
+    ;;
+  node)
+    _talosctl_config_node
+    ;;
+  esac
+}
+
+function _talosctl_config_add {
+  _arguments \
+    '--ca[the path to the CA certificate]:' \
+    '--crt[the path to the certificate]:' \
+    '--key[the path to the key]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_config_context {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_config_endpoint {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_config_node {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_containers {
+  _arguments \
+    '(-k --kubernetes)'{-k,--kubernetes}'[use the k8s.io containerd namespace]' \
+    '(-c --use-cri)'{-c,--use-cri}'[use the CRI driver]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_copy {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_crashdump {
+  _arguments \
+    '*--control-plane-nodes[specify IPs of control plane nodes]:' \
+    '--init-node[specify IPs of init node]:' \
+    '*--worker-nodes[specify IPs of worker nodes]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_dashboard {
+  _arguments \
+    '(-d --update-interval)'{-d,--update-interval}'[interval between updates]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_dmesg {
+  _arguments \
+    '(-f --follow)'{-f,--follow}'[specify if the kernel log should be streamed]' \
+    '--tail[specify if only new messages should be sent (makes sense only when combined with --follow)]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_events {
+  _arguments \
+    '--duration[show events for the past duration interval (one second resolution, default is to show no history)]:' \
+    '--since[show events after the specified event ID (default is to show no history)]:' \
+    '--tail[show specified number of past events (use -1 to show full history, default is to show no history)]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+
+function _talosctl_gen {
+  local -a commands
+
+  _arguments -C \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "ca:Generates a self-signed X.509 certificate authority"
+      "config:Generates a set of configuration files for Talos cluster"
+      "crt:Generates an X.509 Ed25519 certificate"
+      "csr:Generates a CSR using an Ed25519 private key"
+      "key:Generates an Ed25519 private key"
+      "keypair:Generates an X.509 Ed25519 key pair"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  ca)
+    _talosctl_gen_ca
+    ;;
+  config)
+    _talosctl_gen_config
+    ;;
+  crt)
+    _talosctl_gen_crt
+    ;;
+  csr)
+    _talosctl_gen_csr
+    ;;
+  key)
+    _talosctl_gen_key
+    ;;
+  keypair)
+    _talosctl_gen_keypair
+    ;;
+  esac
+}
+
+function _talosctl_gen_ca {
+  _arguments \
+    '--hours[the hours from now on which the certificate validity period ends]:' \
+    '--organization[X.509 distinguished name for the Organization]:' \
+    '--rsa[generate in RSA format]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_gen_config {
+  _arguments \
+    '*--additional-sans[additional Subject-Alt-Names for the APIServer certificate]:' \
+    '--dns-domain[the dns domain to use for cluster]:' \
+    '--install-disk[the disk to install to]:' \
+    '--install-image[the image used to perform an installation]:' \
+    '--kubernetes-version[desired kubernetes version to run]:' \
+    '(-o --output-dir)'{-o,--output-dir}'[destination to output generated files]:' \
+    '*--registry-mirror[list of registry mirrors to use in format: <registry host>=<mirror URL>]:' \
+    '--version[the desired machine config version to generate]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_gen_crt {
+  _arguments \
+    '--ca[path to the PEM encoded CERTIFICATE]:' \
+    '--csr[path to the PEM encoded CERTIFICATE REQUEST]:' \
+    '--hours[the hours from now on which the certificate validity period ends]:' \
+    '--name[the basename of the generated file]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_gen_csr {
+  _arguments \
+    '--ip[generate the certificate for this IP address]:' \
+    '--key[path to the PEM encoded EC or RSA PRIVATE KEY]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_gen_key {
+  _arguments \
+    '--name[the basename of the generated file]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_gen_keypair {
+  _arguments \
+    '--ip[generate the certificate for this IP address]:' \
+    '--organization[X.509 distinguished name for the Organization]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_health {
+  _arguments \
+    '*--control-plane-nodes[specify IPs of control plane nodes]:' \
+    '--init-node[specify IPs of init node]:' \
+    '--k8s-endpoint[use endpoint instead of kubeconfig default]:' \
+    '--server[run server-side check]' \
+    '--wait-timeout[timeout to wait for the cluster to be ready]:' \
+    '*--worker-nodes[specify IPs of worker nodes]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_help {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_interfaces {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_kubeconfig {
+  _arguments \
+    '(-f --force)'{-f,--force}'[Force overwrite of kubeconfig if already present]' \
+    '(-m --merge)'{-m,--merge}'[Merge with existing kubeconfig]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_list {
+  _arguments \
+    '(-d --depth)'{-d,--depth}'[maximum recursion depth]:' \
+    '(-H --humanize)'{-H,--humanize}'[humanize size and time in the output]' \
+    '(-l --long)'{-l,--long}'[display additional file details]' \
+    '(-r --recurse)'{-r,--recurse}'[recurse into subdirectories]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_logs {
+  _arguments \
+    '(-f --follow)'{-f,--follow}'[specify if the logs should be streamed]' \
+    '(-k --kubernetes)'{-k,--kubernetes}'[use the k8s.io containerd namespace]' \
+    '--tail[lines of log file to display (default is to show from the beginning)]:' \
+    '(-c --use-cri)'{-c,--use-cri}'[use the CRI driver]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_memory {
+  _arguments \
+    '(-v --verbose)'{-v,--verbose}'[display extended memory statistics]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_mounts {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_processes {
+  _arguments \
+    '(-s --sort)'{-s,--sort}'[Column to sort output by. [rss|cpu]]:' \
+    '(-w --watch)'{-w,--watch}'[Stream running processes]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_read {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_reboot {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_recover {
+  _arguments \
+    '(-s --source)'{-s,--source}'[The data source for restoring the control plane manifests from (valid options are "apiserver" and "etcd")]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_reset {
+  _arguments \
+    '--graceful[if true, attempt to cordon/drain node and leave etcd (if applicable)]' \
+    '--reboot[if true, reboot the node after resetting instead of shutting down]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_restart {
+  _arguments \
+    '(-k --kubernetes)'{-k,--kubernetes}'[use the k8s.io containerd namespace]' \
+    '(-c --use-cri)'{-c,--use-cri}'[use the CRI driver]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_rollback {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_routes {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_service {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_shutdown {
+  _arguments \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_stats {
+  _arguments \
+    '(-k --kubernetes)'{-k,--kubernetes}'[use the k8s.io containerd namespace]' \
+    '(-c --use-cri)'{-c,--use-cri}'[use the CRI driver]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_time {
+  _arguments \
+    '(-c --check)'{-c,--check}'[checks server time against specified ntp server]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_upgrade {
+  _arguments \
+    '(-i --image)'{-i,--image}'[the container image to use for performing the install]:' \
+    '(-p --preserve)'{-p,--preserve}'[preserve data]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_upgrade-k8s {
+  _arguments \
+    '--from[the Kubernetes control plane version to upgrade from]:' \
+    '--to[the Kubernetes control plane version to upgrade to]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_validate {
+  _arguments \
+    '(-c --config)'{-c,--config}'[the path of the config file]:' \
+    '(-m --mode)'{-m,--mode}'[the mode to validate the config for]:' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
+function _talosctl_version {
+  _arguments \
+    '--client[Print client version only]' \
+    '--short[Print the short version]' \
+    '--context[Context to be used in command]:' \
+    '(*-e *--endpoints)'{\*-e,\*--endpoints}'[override default endpoints in Talos configuration]:' \
+    '(*-n *--nodes)'{\*-n,\*--nodes}'[target the specified nodes]:' \
+    '--talosconfig[The path to the Talos configuration file]:'
+}
+
