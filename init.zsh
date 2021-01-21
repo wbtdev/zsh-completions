@@ -36,7 +36,7 @@ unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 # cache time of 20 hours, so it should almost always regenerate the first time a
 # shell is opened each day.
 autoload -Uz compinit
-_comp_path="${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump"
+_comp_path="${ZINIT[ZCOMPDUMP_PATH]:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump}"
 # #q expands globs in conditional expressions
 if [[ $_comp_path(#qNmh-20) ]]; then
   # -C (skip function check) implies -i (skip security check).
@@ -53,7 +53,7 @@ unset _comp_path
 
 # Use caching to make completion for commands such as dpkg and apt usable.
 zstyle ':completion::complete:*' use-cache on
-zstyle ':completion::complete:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zcompcache"
+zstyle ':completion::complete:*' cache-path "$ZINIT[ZCOMPDUMP_PATH]:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump}"
 
 # Case-insensitive (all), partial-word, and then substring completion.
 if zstyle -t ':prezto:module:completion:*' case-sensitive; then
@@ -152,3 +152,5 @@ zstyle ':completion:*:ssh:*' group-order users hosts-domain hosts-host users hos
 zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns '*(.|:)*' loopback ip6-loopback localhost ip6-localhost broadcasthost
 zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns '<->.<->.<->.<->' '^[-[:alnum:]]##(.[-[:alnum:]]##)##' '*@*'
 zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*'
+
+# echo "completions loaded from init.zsh"
